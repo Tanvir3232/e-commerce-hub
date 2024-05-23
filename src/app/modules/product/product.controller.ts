@@ -37,7 +37,35 @@ const getAllProducts = async (req: Request, res: Response) => {
         })
     }
 }
+const getSingleProduct = async (req: Request, res: Response) => {
+    try {
+        const { productId } = req.params;
+        const result = await ProductSevices.getSingleProductFromDB(productId)
+        if (result) {
+            res.status(200).json({
+                success: true,
+                message: "Product fetched successfully!",
+                data: result
+            })
+        }
+        else {
+            // If product does not exist, respond with a 404 status code and an error message
+            res.status(404).json({
+                success: false,
+                message: "Product not found!"
+            });
+        }
+
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err
+        })
+    }
+}
 export const ProductControllers = {
     addProduct,
     getAllProducts,
+    getSingleProduct,
 }
