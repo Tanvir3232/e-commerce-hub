@@ -49,7 +49,31 @@ const getSingleProduct = async (req: Request, res: Response) => {
             })
         }
         else {
-            // If product does not exist, respond with a 404 status code and an error message
+            res.status(404).json({
+                success: false,
+                message: "Product not found!"
+            });
+        }
+
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err
+        })
+    }
+}
+const deleteSingleProduct = async (req: Request, res: Response) => {
+    try {
+        const { productId } = req.params;
+        const result = await ProductSevices.deleteProductFromDB(productId)
+        if (result.deletedCount > 0) {
+            res.status(200).json({
+                success: true,
+                message: "Product deleted successfully!",
+                data: null
+            });
+        } else {
             res.status(404).json({
                 success: false,
                 message: "Product not found!"
@@ -68,4 +92,5 @@ export const ProductControllers = {
     addProduct,
     getAllProducts,
     getSingleProduct,
+    deleteSingleProduct,
 }

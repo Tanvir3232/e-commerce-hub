@@ -8,7 +8,7 @@ export type ProductInventory = {
     inStock: boolean;
 };
 
-export type IProduct = {
+export type TProduct = {
     name: string;
     description: string;
     price: number;
@@ -18,4 +18,4 @@ export type IProduct = {
     inventory: ProductInventory;
 };
 
-export default IProduct;
+export default TProduct;

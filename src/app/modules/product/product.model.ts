@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import IProduct, { ProductInventory, ProductVariant } from './product.interface';
+import TProduct, { ProductInventory, ProductVariant } from './product.interface';
 const productVarientSchema = new Schema<ProductVariant>(
     {
         type: { type: String, required: true },
@@ -14,7 +14,7 @@ const productInventorySchema = new Schema<ProductInventory>(
     },
     { _id: false }
 )
-const productSchema = new Schema<IProduct>({
+const productSchema = new Schema<TProduct>({
     name: {
         type: String,
         trim: true,
@@ -25,7 +25,8 @@ const productSchema = new Schema<IProduct>({
     category: { type: String, required: [true, "category is required"] },
     tags: { type: [String], required: [true, "tags are required"] },
     variants: { type: [productVarientSchema], required: [true, "Variants are required"] },
-    inventory: { type: productInventorySchema, required: [true, "Inventory are required"] }
+    inventory: { type: productInventorySchema, required: [true, "Inventory are required"] },
+
 })
-const ProductModel = model<IProduct>('products', productSchema);
+const ProductModel = model<TProduct>('products', productSchema);
 export default ProductModel;
