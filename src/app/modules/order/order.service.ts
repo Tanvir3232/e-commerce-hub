@@ -39,7 +39,24 @@ const addOrderIntoDB = async (order: TOrder) => {
     const result = await OrderModel.create({ ...order, price: totalPrice });
     return result;
 };
+const getAllOrdersFromDB = async () => {
+    const orders = await OrderModel.find();
+    return orders;
+}
+const searchOrdersByEmail = async (searchTerm: string): Promise<TOrder[]> => {
+
+    const regex = new RegExp(searchTerm, 'i');
+    const orders = await OrderModel.find({ email: { $regex: regex } });
+    if (orders.length === 0) {
+        throw new Error(`No orders found matching the search user email:${searchTerm}`);
+    }
+
+    return orders;
+
+};
 
 export const OrderServices = {
-    addOrderIntoDB
+    addOrderIntoDB,
+    getAllOrdersFromDB,
+    searchOrdersByEmail
 };
