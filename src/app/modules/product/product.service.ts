@@ -25,9 +25,21 @@ const deleteProductFromDB = async (id: string) => {
     const result = await ProductModel.deleteOne({ _id: id });
     return result;
 }
+const updateProductIntoDB = async (productId: string, updatedProduct: TProduct) => {
+    if (!isValidObjectId(productId)) {
+        throw new Error("Invalid product ID");
+    }
+    const result = await ProductModel.findByIdAndUpdate(
+        productId,
+        { $set: updatedProduct },
+        { new: true, runValidators: true }
+    );
+    return result;
+};
 export const ProductSevices = {
     addProductIntoDB,
     getAllProductsFromDB,
     getSingleProductFromDB,
-    deleteProductFromDB
+    deleteProductFromDB,
+    updateProductIntoDB
 }
