@@ -36,10 +36,23 @@ const updateProductIntoDB = async (productId: string, updatedProduct: TProduct) 
     );
     return result;
 };
+const searchProducts = async (searchTerm: string): Promise<TProduct[]> => {
+    const regex = new RegExp(searchTerm, 'i');
+    const products = await ProductModel.find({
+        $or: [
+            { name: { $regex: regex } },
+            { description: { $regex: regex } },
+            { category: { $regex: regex } },
+        ]
+    });
+    return products;
+};
+
 export const ProductSevices = {
     addProductIntoDB,
     getAllProductsFromDB,
     getSingleProductFromDB,
     deleteProductFromDB,
-    updateProductIntoDB
+    updateProductIntoDB,
+    searchProducts
 }

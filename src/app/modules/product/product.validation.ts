@@ -22,6 +22,8 @@ const productValidationSchema = z.object({
     name: z.string()
         .nonempty("Name is required")
         .trim()
+        .min(6, 'Name must be at least 6 characters')
+        .max(20, 'Name must be at most 20 characters')
         .transform(capitalizeWords),
     description: z.string().nonempty("Description is required"),
     price: z.number().positive("Price must be a positive number"),

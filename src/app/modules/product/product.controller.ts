@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ZodError } from "zod";
+import TProduct from "./product.interface";
 import { ProductSevices } from "./product.service";
 import productValidationSchema from "./product.validation";
 const addProduct = async (req: Request, res: Response) => {
@@ -23,12 +24,23 @@ const addProduct = async (req: Request, res: Response) => {
 }
 const getAllProducts = async (req: Request, res: Response) => {
     try {
-        const result = await ProductSevices.getAllProductsFromDB();
+        const searchTerm: string = req.query.searchTerm as string;
+        let products: TProduct[];
+        let message: string;
+        if (searchTerm) {
+            // Search products if a search term is provided
+            products = await ProductSevices.searchProducts(searchTerm);
+            message = `Products matching search term '${searchTerm}' fetched successfully!`
+        } else {
+            // Retrieve all products if no search term is provided
+            products = await ProductSevices.getAllProductsFromDB();
+            message = 'Products fetched successfully!'
+        }
         res.status(200).json({
             success: true,
-            message: "Products fetched successfully!",
-            data: result
-        })
+            message: message,
+            data: products
+        });
     } catch (err: any) {
         res.status(500).json({
             success: false,
@@ -121,5 +133,5 @@ export const ProductControllers = {
     getAllProducts,
     getSingleProduct,
     deleteSingleProduct,
-    updateProduct,
+    updateProduct
 }

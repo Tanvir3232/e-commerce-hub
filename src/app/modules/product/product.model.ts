@@ -18,6 +18,9 @@ const productSchema = new Schema<TProduct>({
     name: {
         type: String,
         trim: true,
+        minlength: [6, 'Name must be at least 6 characters'],
+        maxlength: [20, 'Name must be at most 20 characters'],
+        unique: true,
         required: [true, "Name is required"]
     },
     description: { type: String, required: [true, "description is required"] },
